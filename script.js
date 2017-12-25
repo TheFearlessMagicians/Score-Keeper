@@ -18,7 +18,6 @@ $('form input').keydown(function (e) {
 });
 
 btnGO.addEventListener("click", function() {
-//initialForm.addEventListener("submit", function () {
     playerList = []
     while (listOfPlayersHTML.firstChild) {
         listOfPlayersHTML.removeChild(listOfPlayersHTML.firstChild)
