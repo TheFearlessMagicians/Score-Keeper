@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Score Keeper</title>
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js" type="text/javascript" charset="utf-8" async defer></script>
+</head>
+
+<body>
+    <div class="alert alert-danger">
+        <strong>Less than 2 players entered!</strong>
+    </div>
+    <div class="container">
+        <h1> Score Keeper </h1>
+        <form>
+            <div class="form-group">
+                <label for="numOfPlayers" id="labelPlayer">Players: &nbsp; </label>
+                <input id="numOfPlayers" type="number" name="players">
+                <button type="button" class="btn btn-default btn-lg" id="goBtn">Go!</button>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <div class="container">
+        <h3 class="playersPlaying"></h3>
+        <div class="row">
+            <div class="row">
+                <!-- All the player stats go in here and the score button ration of 10: 2 -->
+                <div id="list" class="col-xs-8">
+                </div>
+                <div id="RS" class="col-xs-4">
+                    <div class="form-group">
+                        <label for="sel1">
+                            <h3>Player: </h3></label>
+                        <select class="form-control" id="sel1">
+                        </select>
+                        <label for="pointss">
+                            <h3>Points: </h3></label>
+                        <input id="points" type="number" name="p">
+                        <br>
+                        <button type="button" class="btn btn-success btn-lg">Score!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
