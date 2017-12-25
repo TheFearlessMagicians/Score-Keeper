@@ -8,8 +8,17 @@ let scoreButton = document.getElementsByClassName("btn-success")[0];
 let pointsScored = document.getElementById("points");
 let alert = document.getElementsByClassName("alert")[0];
 let playerList = [];
+let initialForm = document.getElementById("initialForm");
+
+$('form input').keydown(function (e) {
+    if (e.keyCode == 13) {
+        e.preventDefault();
+        return false;
+    }
+});
 
 btnGO.addEventListener("click", function() {
+//initialForm.addEventListener("submit", function () {
     playerList = []
     while (listOfPlayersHTML.firstChild) {
         listOfPlayersHTML.removeChild(listOfPlayersHTML.firstChild)
