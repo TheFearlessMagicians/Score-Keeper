@@ -8,6 +8,7 @@ let scoreButton = document.getElementsByClassName("btn-success")[0];
 let pointsScored = document.getElementById("points");
 let alert = document.getElementsByClassName("alert")[0];
 let playerList = [];
+
 btnGO.addEventListener("click", function() {
     playerList = []
     while (listOfPlayersHTML.firstChild) {
