@@ -1,5 +1,5 @@
 "use strict";
-let btnGO = document.getElementById("goBtn");
+let btnGo = document.getElementById("goBtn");
 let inputPlayers = document.getElementById("numOfPlayers");
 let listOfPlayersHTML = document.createElement("ul");
 let divList = document.getElementById("list");
@@ -17,7 +17,7 @@ $('form input').keydown(function (e) {
     }
 });
 
-btnGO.addEventListener("click", function() {
+btnGo.addEventListener("click", function() {
     playerList = []
     while (listOfPlayersHTML.firstChild) {
         listOfPlayersHTML.removeChild(listOfPlayersHTML.firstChild)
@@ -34,11 +34,23 @@ btnGO.addEventListener("click", function() {
         alert.style.display = "none";
     }
     h2Msg.innerHTML = "Players playing: " + inputPlayers.value;
-    init();
+ //   init();
+ //
+        init();
     divList.appendChild(listOfPlayersHTML);
     document.getElementById("RS").style.visibility = "visible";
 
-    $("form#initialForm").slideUp(800,()=>{});
+    $("form#initialForm").slideUp(400,()=>{
+        $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>");
+        $("ul li").prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
+        $("li button#incrementScore").click(function(){
+         scored( $(this).parent().attr("id"),1);  
+        });
+        $("li button#decrementScore").click(function(){
+          scored($(this).parent().attr("id"),-1);
+        });
+    });
+
 })
 
 function init() {
@@ -47,8 +59,12 @@ function init() {
         let p = new player(x);
         playerList.push(p);
         let liPHTML = document.createElement("li");
+        liPHTML.setAttribute("id",x);
         let textP = document.createTextNode(p.textString());
-        liPHTML.appendChild(textP);
+        let textPTag = document.createElement("b");
+        textPTag.appendChild(textP);
+
+        liPHTML.appendChild(textPTag);
         liPHTML.classList.add("playersStyle");
         listOfPlayersHTML.appendChild(liPHTML);
         let option = document.createElement("option");
@@ -58,29 +74,40 @@ function init() {
     }
 }
 
-scoreButton.addEventListener("click", function() {
-
-    let idOfPlayer = Number(selectHTML.value);
-
-    let points = Number(pointsScored.value);
-    console.log(points);
+function scored(playerId,pointsScored){
+    let idOfPlayer = playerId;
+    let points = pointsScored;
     playerList[idOfPlayer - 1].updateScore(points);
     let playerScore = playerList[idOfPlayer - 1].textString();
-    let playerScoreText = document.createTextNode(playerScore);
-    let p1 = listOfPlayersHTML.childNodes[idOfPlayer - 1];
-    p1.replaceChild(playerScoreText, p1.childNodes[0]);
+
+    //This vvv not sure about this one.
+    //let playerScoreText = document.createTextNode(playerScore);
+    //let p1 = listOfPlayersHTML.childNodes[idOfPlayer - 1];
+    //p1.replaceChild(playerScoreText, p1.childNodes[0]);
+    // ^^^
+    
+    //replacement:
+    $("li#"+idOfPlayer+" b").html(playerScore);
+    //end
     let animationClass = "";
     if (points > 0){
         animationClass="playerScoreAnimation";}
     else{
         animationClass="playerDeductScoreAnimation";}
-
     $("ul li.playersStyle").eq(idOfPlayer - 1).addClass(animationClass);
    window.setTimeout(function(){
    $("ul li.playersStyle").eq(idOfPlayer - 1).removeClass(animationClass);
    },400); 
+}
 
-})
+scoreButton.addEventListener("click", function() {
+
+    let idOfPlayer = Number(selectHTML.value);
+
+    let points = Number(pointsScored.value);
+    scored(idOfPlayer,points);
+
+});
 
 class player {
     constructor(id) {

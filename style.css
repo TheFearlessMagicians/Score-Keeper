@@ -33,6 +33,10 @@ hr {
 }
 
 
+.incrementButtons {
+background-color: #ffffff;
+
+}
 .playerScoreAnimation {
     background-color: #fff !important;
     -webkit-animation: your-animation-name 0.4s ease 0s 1 alternate !important;
