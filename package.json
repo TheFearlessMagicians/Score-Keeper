@@ -1,0 +1,31 @@
+{
+  "name": "scorekeeper",
+  "version": "1.0.0",
+  "description": "A simple score keeper app with some extra features ;)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheFearlessMagicians/Score-Keeper.git"
+  },
+  "keywords": [
+    "Score",
+    "Keeper"
+  ],
+  "author": "Varun Narayanan, Wilson Jusuf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheFearlessMagicians/Score-Keeper/issues"
+  },
+  "homepage": "https://github.com/TheFearlessMagicians/Score-Keeper#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "html": "^1.0.0",
+    "method-override": "^2.3.10",
+    "mongoose": "^4.13.9"
+  }
+}
