@@ -25,9 +25,20 @@ hr {
 #labelPlayer {
     font-size: 1.6em;
 }
+.col{
+    float:  left;
+    position: relative;
+
+}
 
 #RS {
     visibility: hidden;
-    margin-top: -4%;
-    align-content: center;
+    width: 45%;
+    margin-top: -4.5%;
+}
+
+#list{
+    width:  45%;
+    margin: 0;
+    margin-right: 10%;
 }

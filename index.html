@@ -20,7 +20,7 @@
     </div>
     <div class="container">
         <h1> Score Keeper </h1>
-        <form id = "initialForm">
+        <form id="initialForm">
             <div class="form-group">
                 <label for="numOfPlayers" id="labelPlayer">Players: &nbsp; </label>
                 <input id="numOfPlayers" type="number" name="players">
@@ -31,26 +31,22 @@
     <hr>
     <div class="container">
         <h3 class="playersPlaying"></h3>
-        <div class="row">
-            <div class="row">
-                <!-- All the player stats go in here and the score button ration of 10: 2 -->
-                <div id="list" class="col-xs-8">
-                </div>
-                <div id="RS" class="col-xs-4">
-                    <div class="form-group">
-                        <label for="sel1">
-                            <h3>Player: </h3></label>
-                        <select class="form-control" id="sel1">
-                        </select>
-                        <label for="pointss">
-                            <h3>Points: </h3></label>
-                        <input id="points" type="number" name="p">
-                        <br>
-                        <button type="button" class="btn btn-success btn-lg">Score!</button>
-                    </div>
+            <div id="list" class=" col">
+            </div>
+            <div id="RS" class=" col">
+                <div class="form-group">
+                    <label for="sel1">
+                        <h3>Player: </h3></label>
+                    <select class="form-control" id="sel1">
+                    </select>
+                    <label for="pointss">
+                        <h3>Points: </h3></label>
+                    <input id="points" type="number" name="p">
+                    <br>
+                    <button type="button" class="btn btn-success btn-lg">Score!</button>
                 </div>
             </div>
-        </div>
+    </div>
     </div>
 </body>
 
