@@ -33,6 +33,7 @@ hr {
 
 #RS {
     visibility: hidden;
+<<<<<<< HEAD
     width: 45%;
     margin-top: -4.5%;
 }
@@ -42,3 +43,84 @@ hr {
     margin: 0;
     margin-right: 10%;
 }
+=======
+    margin-top: -4%;
+    align-content: center;
+}
+
+
+.incrementButtons {
+background-color: #ffffff;
+
+}
+.playerScoreAnimation {
+    background-color: #fff !important;
+    -webkit-animation: your-animation-name 0.4s ease 0s 1 alternate !important;
+}
+
+
+
+@-webkit-keyframes your-animation-name {
+    from { background-color: #5EB4FE;}
+    to {background-color: #fff;}
+}
+-moz-animation: your-animation-name 0.4s ease 0s 1 alternate !important;
+}
+@-moz-keyframes your-animation-name {
+    from { background-color: #5EB4FE;}
+    to {background-color: #fff;}
+}
+-ms-animation: your-animation-name 0.4s ease 0s 1 alternate !important;
+}
+@-ms-keyframes your-animation-name {
+    from { background-color: #5EB4FE;}
+    to {background-color: #fff;}
+}
+-o-animation: your-animation-name 0.4s ease 0s 1 alternate !important;
+}
+@-o-keyframes your-animation-name {
+    from { background-color: #5EB4FE;}
+    to {background-color: #fff;}
+}
+animation: your-animation-name 0.4s ease 0s 1 alternate !important;
+}
+@keyframes your-animation-name {
+    from { background-color: #5EB4FE;}
+    to {background-color: #fff;}
+}
+
+
+.playerDeductScoreAnimation {
+    background-color: #fff !important;
+    -webkit-animation: your-animation-name2 0.4s ease 0s 1 alternate !important;
+}
+
+@-webkit-keyframes your-animation-name2 {
+    from { background-color: #BD2329;}
+    to {background-color: #fff;}
+}
+-moz-animation: your-animation-name2 0.4s ease 0s 1 alternate !important;
+}
+@-moz-keyframes your-animation-name2 {
+    from { background-color: #BD2329;}
+    to {background-color: #fff;}
+}
+-ms-animation: your-animation-name2 0.4s ease 0s 1 alternate !important;
+}
+@-ms-keyframes your-animation-name2 {
+    from { background-color: #BD2329;}
+    to {background-color: #fff;}
+}
+-o-animation: your-animation-name2 0.4s ease 0s 1 alternate !important;
+}
+@-o-keyframes your-animation-name {
+    from { background-color: #BD2329;}
+    to {background-color: #fff;}
+}
+animation: your-animation-name2 0.4s ease 0s 1 alternate !important;
+}
+@keyframes your-animation-name2 {
+    from { background-color: #BD2329;}
+    to {background-color: #fff;}
+}
+>>>>>>> 31e33ef35005d0b8a9d9d3e48e1747a37548c83e
