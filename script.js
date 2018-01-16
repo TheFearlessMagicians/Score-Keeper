@@ -37,6 +37,8 @@ btnGO.addEventListener("click", function() {
     init();
     divList.appendChild(listOfPlayersHTML);
     document.getElementById("RS").style.visibility = "visible";
+
+    $("form#initialForm").slideUp(800,()=>{});
 })
 
 function init() {
@@ -57,13 +59,27 @@ function init() {
 }
 
 scoreButton.addEventListener("click", function() {
+
     let idOfPlayer = Number(selectHTML.value);
+
     let points = Number(pointsScored.value);
+    console.log(points);
     playerList[idOfPlayer - 1].updateScore(points);
     let playerScore = playerList[idOfPlayer - 1].textString();
     let playerScoreText = document.createTextNode(playerScore);
     let p1 = listOfPlayersHTML.childNodes[idOfPlayer - 1];
     p1.replaceChild(playerScoreText, p1.childNodes[0]);
+    let animationClass = "";
+    if (points > 0){
+        animationClass="playerScoreAnimation";}
+    else{
+        animationClass="playerDeductScoreAnimation";}
+
+    $("ul li.playersStyle").eq(idOfPlayer - 1).addClass(animationClass);
+   window.setTimeout(function(){
+   $("ul li.playersStyle").eq(idOfPlayer - 1).removeClass(animationClass);
+   },400); 
+
 })
 
 class player {
