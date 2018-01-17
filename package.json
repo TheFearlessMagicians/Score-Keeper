@@ -4,6 +4,7 @@
   "description": "A simple score keeper app with some extra features ;)",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon --watch .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,6 +27,7 @@
     "express": "^4.16.2",
     "html": "^1.0.0",
     "method-override": "^2.3.10",
-    "mongoose": "^4.13.9"
+    "mongoose": "^4.13.9",
+    "nodemon": "^1.14.11"
   }
 }
