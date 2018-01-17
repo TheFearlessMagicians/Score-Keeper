@@ -18,7 +18,7 @@ mongoose.createConnection("mongodb://localhost/ScoreKeeper");
 let PlayerSchema = new mongoose.Schema({
 	idInGame: Number,
 	points: Number,
-})
+});
 
 let GameSchema = new mongoose.Schema({
 	players: [PlayerSchema],
@@ -26,7 +26,7 @@ let GameSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     }
-})
+});
 
 //BodyParser set up
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,4 +54,5 @@ io.on('connection', function(socket) {
                      let scoreUpdate = data.scoreUpdate;
                      //TODO: VARUN : scoreUpdate event here. Update the database.
                      
-           })
+           });
+});
