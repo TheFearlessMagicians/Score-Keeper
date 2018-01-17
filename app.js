@@ -20,7 +20,7 @@ let PlayerSchema = new mongoose.Schema({
 })
 
 let GameSchema = new mongoose.Schema({
-	players: [PlayerSchema]
+	players: [PlayerSchema],
     created: {
         type: Date,
         default: Date.now,
