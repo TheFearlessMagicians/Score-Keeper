@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 app.get('/', function(req, res) {
-    //res.sendFile("./index.html");
+
     res.render('index', {});
 });
 
@@ -53,5 +53,6 @@ io.on('connection', function(socket) {
                      let userId= data.userId;
                      let scoreUpdate = data.scoreUpdate;
                      //TODO: VARUN : scoreUpdate event here. Update the database.
-                     
-           })
+                     console.log(`${userId} scored: ${scoreUpdate}`);
+           });
+ });
