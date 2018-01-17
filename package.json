@@ -28,6 +28,7 @@
     "html": "^1.0.0",
     "method-override": "^2.3.10",
     "mongoose": "^4.13.9",
-    "nodemon": "^1.14.11"
+    "nodemon": "^1.14.11",
+    "socket-io": "^1.0.0"
   }
 }

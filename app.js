@@ -1,5 +1,6 @@
 //Entry Point for the web app
 let express = require("express");
+let io = require('socket.io')();
 let a = 21;
 
 let app = express();
@@ -38,8 +39,19 @@ app.get('/', function(req, res) {
     res.render('index', {});
 });
 
-//I haven't migrated to ejs yet.
 
-app.listen(8000, function() {
+
+let server= app.listen(8000, function() {
     console.log("Server is running on 8000");
 });
+
+io.attach(server);
+io.on('connection', function(socket) {
+           socket.on('connect',function(data){});
+
+           socket.on('scoreUpdate',function(data){
+                     let userId= data.userId;
+                     let scoreUpdate = data.scoreUpdate;
+                     //TODO: VARUN : scoreUpdate event here. Update the database.
+                     
+           })
