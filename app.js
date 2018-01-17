@@ -16,12 +16,12 @@ app.set('view engine', 'ejs');
 mongoose.createConnection("mongodb://localhost/ScoreKeeper");
 
 let PlayerSchema = new mongoose.Schema({
-	idInGame: Number,
-	points: Number,
+    idInGame: Number,
+    points: Number,
 });
 
 let GameSchema = new mongoose.Schema({
-	players: [PlayerSchema],
+    players: [PlayerSchema],
     created: {
         type: Date,
         default: Date.now,
@@ -35,24 +35,30 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 app.get('/', function(req, res) {
-
     res.render('index', {});
+});
+
+app.post('/', function(req, res) {
+	let players = req.body.players;
+	console.log(players);
 });
 
 
 
-let server= app.listen(8000, function() {
+
+
+let server = app.listen(8000, function() {
     console.log("Server is running on 8000");
 });
 
 io.attach(server);
 io.on('connection', function(socket) {
-           socket.on('connect',function(data){});
+    socket.on('connect', function(data) {});
 
-           socket.on('scoreUpdate',function(data){
-                     let userId= data.userId;
-                     let scoreUpdate = data.scoreUpdate;
-                     //TODO: VARUN : scoreUpdate event here. Update the database.
-                     console.log(`${userId} scored: ${scoreUpdate}`);
-           });
- });
+    socket.on('scoreUpdate', function(data) {
+        let userId = data.userId;
+        let scoreUpdate = data.scoreUpdate;
+        //TODO: VARUN : scoreUpdate event here. Update the database.
+        console.log(`${userId} scored: ${scoreUpdate}`);
+    });
+});

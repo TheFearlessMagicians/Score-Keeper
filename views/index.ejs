@@ -22,13 +22,11 @@
     </div>
     <div class="container">
         <h1> Score Keeper </h1>
-        <form id="initialForm">
+        <form id="initialForm" method="GET" action="/new">
             <div class="form-group">
                 <label for="numOfPlayers" id="labelPlayer">Players: &nbsp; </label>
                 <input id="numOfPlayers" type="number" name="players">
-                <form id="initialForm" method="GET" action="/"> 
-                    <button type="button" class="btn btn-default btn-lg" id="goBtn">Go!</button>
-                </form>
+                <button type="button" class="btn btn-default btn-lg" id="goBtn">Go!</button>
             </div>
         </form>
     </div>
@@ -43,7 +41,7 @@
                         <h3>Player: </h3></label>
                     <select class="form-control" id="sel1">
                     </select>
-                    <label for="pointss">
+                    <label for="points">
                         <h3>Points: </h3></label>
                     <input id="points" type="number" name="p">
                     <br>
@@ -53,6 +51,17 @@
     </div>
     </div>
 </body>
+<!-- jquery post scripts: -->
+
+<script>
+$("button#goBtn").on('click',(event)=>{
+    // console.log('posted '+document.getElementById('numOfPlayers').value);
+    $.post('/', {players:document.getElementById('numOfPlayers').value});
+
+    });
+
+
+</script>
 <!-- socket-io scripts: -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
