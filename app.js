@@ -10,9 +10,22 @@ let path = require('path');
 //Allowing JS and CSS to run somoothly and setting up a public directory for the css
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', 'views');
-app.set('view engine','ejs');
+app.set('view engine', 'ejs');
 //Connecting to database
 mongoose.createConnection("mongodb://localhost/ScoreKeeper");
+
+let PlayerSchema = new mongoose.Schema({
+	idInGame: Number,
+	points: Number,
+})
+
+let GameSchema = new mongoose.Schema({
+	players: [PlayerSchema]
+    created: {
+        type: Date,
+        default: Date.now,
+    }
+})
 
 //BodyParser set up
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,13 +33,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //MethodOverride set up
 app.use(methodOverride("_method"));
 
-app.get('/', function(req,res){
-	//res.sendFile("./index.html");
-          res.render('index',{});
+app.get('/', function(req, res) {
+    //res.sendFile("./index.html");
+    res.render('index', {});
 });
 
 //I haven't migrated to ejs yet.
 
-app.listen(8000, function(){
-	console.log("Server is running on 8000");
+app.listen(8000, function() {
+    console.log("Server is running on 8000");
 });
