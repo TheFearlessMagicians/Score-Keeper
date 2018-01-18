@@ -87,22 +87,23 @@ io.on('connection', function(socket) {
     socket.on('connect', function(data) {});
 
     socket.on('scoreUpdate', function(data) {
+        console.log(data); //NOTHING PRINTS :
         let userId = Number(data.userId);
         let scoreUpdate = Number(data.scoreUpdate);
         //TODO: VARUN : scoreUpdate event here. Update the database.
-    console.log(userId, scoreUpdate);
-    Player.findOne({
-        idInGame: userId,
-    }, function(error, foundPlayer){
-        foundPlayer.points += scoreUpdate;
-        foundPlayer.save(function(error,savedPlayer){
-            if (error){
-                console.log(error);
-            } else {
-                console.log(savedPlayer);
-            }
+        console.log(userId, scoreUpdate); // NOTHING PRINTS :(
+        Player.findOne({
+            idInGame: userId,
+        }, function(error, foundPlayer) {
+            foundPlayer.points += scoreUpdate;
+            foundPlayer.save(function(error, savedPlayer) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(savedPlayer);
+                }
+            });
         });
-    });
 
         console.log(`${userId} scored: ${scoreUpdate}`);
     });
