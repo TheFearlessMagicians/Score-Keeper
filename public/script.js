@@ -29,22 +29,22 @@ btnGo.addEventListener("click", function() {
         alert.style.display = "block";
         return;
     } else if (Number(inputPlayers.value) >= 2 && alert.style.visibility == "visible") {
-        console.log(alert.style.visibility)
         alert.style.visibility = "hidden";
         alert.style.display = "none";
+        console.log("HI");
+        // $("#RS").css("visibility","visible");
     }
     h2Msg.innerHTML = "Players playing: " + inputPlayers.value;
  //   init();
  //
         init();
     divList.appendChild(listOfPlayersHTML);
-    document.getElementById("RS").style.visibility = "visible";
 
     $("form#initialForm").slideUp(400,()=>{
         $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>");
         $("ul li").prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
         $("li button#incrementScore").click(function(){
-         scored( $(this).parent().attr("id"),1);
+         scored( $(this).parent().attr("id"),1);  
         });
         $("li button#decrementScore").click(function(){
           scored($(this).parent().attr("id"),-1);
@@ -80,19 +80,15 @@ function scored(playerId,pointsScored){
     playerList[idOfPlayer - 1].updateScore(points);
     let playerScore = playerList[idOfPlayer - 1].textString();
 
-
     //This vvv not sure about this one.
     //let playerScoreText = document.createTextNode(playerScore);
     //let p1 = listOfPlayersHTML.childNodes[idOfPlayer - 1];
     //p1.replaceChild(playerScoreText, p1.childNodes[0]);
     // ^^^
-
+    
     //replacement:
     $("li#"+idOfPlayer+" b").html(playerScore);
     //end
-
-
-       socket.emit('scoreUpdate',{'userId':playerId,'scoreUpdate':pointsScored});
     let animationClass = "";
     if (points > 0){
         animationClass="playerScoreAnimation";}
@@ -101,7 +97,7 @@ function scored(playerId,pointsScored){
     $("ul li.playersStyle").eq(idOfPlayer - 1).addClass(animationClass);
    window.setTimeout(function(){
    $("ul li.playersStyle").eq(idOfPlayer - 1).removeClass(animationClass);
-   },400);
+   },400); 
 }
 
 scoreButton.addEventListener("click", function() {

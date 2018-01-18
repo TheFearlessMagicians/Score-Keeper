@@ -31,34 +31,40 @@
         </form>
     </div>
     <hr>
-    <div class="container">
+    <div class="container" id="game">
         <h3 class="playersPlaying"></h3>
-            <div id="list" class=" col">
+        <div id="list" class="col-md-6">
+        </div>
+        <div id="RS" class="col-md-6">
+            <div class="form-group">
+                <label for="sel1">
+                    <h3>Player: </h3></label>
+                <select class="form-control" id="sel1">
+                </select>
+                <label for="points">
+                    <h3>Points: </h3></label>
+                <input id="points" type="number" name="p">
+                <br>
+                <button type="button" class="btn btn-success btn-lg">Score!</button>
             </div>
-            <div id="RS" class=" col">
-                <div class="form-group">
-                    <label for="sel1">
-                        <h3>Player: </h3></label>
-                    <select class="form-control" id="sel1">
-                    </select>
-                    <label for="points">
-                        <h3>Points: </h3></label>
-                    <input id="points" type="number" name="p">
-                    <br>
-                    <button type="button" class="btn btn-success btn-lg">Score!</button>
-                </div>
-            </div>
+        </div>
     </div>
     </div>
 </body>
 <!-- jquery post scripts: -->
 
 <script>
-$("button#goBtn").on('click',(event)=>{
+$('#game').css("display","none");
+$("button#goBtn").on('click', function(event){
     // console.log('posted '+document.getElementById('numOfPlayers').value);
-    $.post('/', {players:document.getElementById('numOfPlayers').value});
-
+    $.post('/', {players:document.getElementById('numOfPlayers').value}, function(event){
+        console.log("HELLO")
     });
+    $("#game").css("display","block");
+
+});
+
+
 
 
 </script>
@@ -67,11 +73,11 @@ $("button#goBtn").on('click',(event)=>{
 <script>
 var socket = io.connect("localhost:8000");
 socket.on('connect', ()=>{
-          socket.on('scoreUpdate',function(data){
-                    let userId = data.userId;
-                    let scoreUpdate = data.scoreUpdate;
-                    //TODO some jquery stuff.
-          });
+    socket.on('scoreUpdate',function(data){
+        let userId = data.userId;
+        let scoreUpdate = data.scoreUpdate;
+        //TODO some jquery stuff.
+    });
 
 });
 //scoreUpdate emit:

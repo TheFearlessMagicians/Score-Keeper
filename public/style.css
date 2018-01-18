@@ -32,9 +32,8 @@ hr {
 }
 
 #RS {
-    visibility: hidden;
-<<<<<<< HEAD
-    width: 45%;
+/*     visibility: hidden;
+ */    width: 45%;
     margin-top: -4.5%;
 }
 
@@ -42,10 +41,6 @@ hr {
     width:  45%;
     margin: 0;
     margin-right: 10%;
-}
-=======
-    margin-top: -4%;
-    align-content: center;
 }
 
 
