@@ -45,7 +45,7 @@ app.get('/', function(req, res) {
 
 app.post('/', function(req, res) {
     //No other way I am capable of except callback hell
-    //Async hell 
+    //Async hell
     //Why do even exist? FML
     let players = Number(req.body.players);
     Game.create({
@@ -91,7 +91,7 @@ io.on('connection', function(socket) {
         let userId = Number(data.userId);
         let scoreUpdate = Number(data.scoreUpdate);
         //TODO: VARUN : scoreUpdate event here. Update the database.
-        console.log(userId, scoreUpdate); // NOTHING PRINTS :(
+        console.log(userId, scoreUpdate); // NOTHING PRINTS :( //UPDATE (wilson): Should work now.
         Player.findOne({
             idInGame: userId,
         }, function(error, foundPlayer) {
