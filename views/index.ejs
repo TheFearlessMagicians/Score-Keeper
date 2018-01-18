@@ -73,7 +73,9 @@ $("button#goBtn").on('click', function(event){
 <script>
 var socket = io.connect("localhost:8000");
 socket.on('connect', ()=>{
+          console.log('connected to socket.')
     socket.on('scoreUpdate',function(data){
+
         let userId = data.userId;
         let scoreUpdate = data.scoreUpdate;
         //TODO some jquery stuff.
