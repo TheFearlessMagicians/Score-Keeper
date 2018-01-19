@@ -51,6 +51,7 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', function(req, res) {
+    //populate the DB
     let players = Number(req.body.players);
     Game.create({
         players: [],
@@ -69,6 +70,7 @@ app.post('/', function(req, res) {
                         console.log(error);
                     } else {
                         newGame.update({
+                            //Thanks @ https://stackoverflow.com/a/48333797/8176981
                             $push: {
                                 players: newPlayer._id
                             }
@@ -92,26 +94,23 @@ let server = app.listen(serverPort, function() {
 io.attach(server);
 io.on('connection', function(socket) {
     socket.on('connect', function(data) {});
-
     socket.on('scoreUpdate', function(data) {
         let userId = Number(data.userId);
         let scoreUpdate = Number(data.scoreUpdate);
         console.log(currentGameID);
         Player.update({
-                parentGameId: currentGameID,
-                idInGame: userId,
+            parentGameId: currentGameID,
+            idInGame: userId,
 
-            }, {
-                $inc: {
-                    points: scoreUpdate,
-                },
+        }, {
+            $inc: {
+                points: scoreUpdate,
             },
-            function(error, updatedPlayer) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(updatedPlayer);
-                }
-            });
+        },
+        function(error, updatedPlayer) {
+            if (error) {
+                console.log(error);
+            }
+        });
     });
 });
