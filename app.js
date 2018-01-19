@@ -37,7 +37,7 @@ let GameSchema = new mongoose.Schema({
 }, { usePushEach: true });
 
 let Game = mongoose.model('Game', GameSchema);
-let currentGameID;
+let currentGameID; // A way to keep track of current gameID ? Got a better idea implement it
 
 //BodyParser set up
 app.use(bodyParser.urlencoded({ extended: true }));
