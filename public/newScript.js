@@ -39,14 +39,9 @@ function init() {
     for (let x = 1; x <= nPlayers; x++) {
                   let p = new player(x);
                   playerList.push(p);
-                  /* ------REPLACEMENT FOR above -----*/
                   let jqueryString = `<li id=${x} class="playersStyle"><b>${p.textString()}</b></li>`
                   $("div#list > ul").append($(jqueryString));
-
-                  let option = document.createElement("option");
-                  let textOption = document.createTextNode(x);
-                  option.appendChild(textOption);
-                  $('div#sel1').append($(option));
+                  $('div#sel1').append(`<option>${x}</option>`);
     }
 }
 
