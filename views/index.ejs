@@ -12,7 +12,7 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="script.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="newScript.js" type="text/javascript" charset="utf-8" async defer></script>
 
   </head>
 
@@ -34,6 +34,9 @@
     <div class="container" id="game">
         <h3 class="playersPlaying"></h3>
         <div id="list" class="col-md-6">
+                  <ul>
+
+                  </ul>
         </div>
         <div id="RS" class="col-md-6">
             <div class="form-group">
@@ -45,7 +48,7 @@
                     <h3>Points: </h3></label>
                 <input id="points" type="number" name="p">
                 <br>
-                <button type="button" class="btn btn-success btn-lg">Score!</button>
+                <button type="button" id='button-success' class="btn btn-success btn-lg">Score!</button>
             </div>
         </div>
     </div>
@@ -75,9 +78,11 @@ socket.on('connect', ()=>{
           console.log('connected to socket.')
     socket.on('scoreUpdate',function(data){
 
+              console.log('received score update from server.')
         let userId = data.userId;
         let scoreUpdate = data.scoreUpdate;
-        //TODO some jquery stuff.
+        scored(userId,scoreUpdate);
+
     });
 
 });

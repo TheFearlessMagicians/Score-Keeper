@@ -12,23 +12,29 @@ document.getElementById('goBtn').addEventListener("click", function() {
                     // Alert the user that he/she has entered invalid value..
                     alert.style.visibility = "visible";
                     alert.style.display = "block";
-                    return;
-          } else if (Number(inputPlayers.value) >= 2 && alert.style.visibility == "visible") {
+          } else if (Number(inputPlayers.value) >= 2 /*&& alert.style.visibility == "visible"*/) {
+                    //NOTE: @ VARUN why must there be a && alert.style.visibility up here ^^ ???
+                    //What's the purpose? I commented it out cos i thought it was unnecessary.??
                     alert.style.visibility = "hidden";
-                    alert.style.display = "none";}
-          document.getElementsByClassName("playersPlaying").innerHTML = "Players playing: " + inputPlayers.value;
-          init();
-          /*--------Animation for the login thing to slide up and begin scoring -----*/
-          $("form#initialForm").slideUp(400,()=>{
-                    $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>");
-                    $("ul li").prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
-                    $("li button#incrementScore").click(function(){
-                              scored( $(this).parent().attr("id"),1);
+                    alert.style.display = "none";
+                    document.getElementsByClassName("playersPlaying").innerHTML = "Players playing: " + inputPlayers.value;
+                    init();
+                    /*--------Animation for the login thing to slide up, and functions for  scoring -----*/
+                    $("form#initialForm").slideUp(400,()=>{
+                              $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>")
+                                          .prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
+                              $("li button#incrementScore").click(function(){
+                                        let id = $(this).parent().attr("id")
+                                         socket.emit('scoreUpdate',{'userId':id,'scoreUpdate':1});
+                                        scored(id,1);
+                              });
+                              $("li button#decrementScore").click(function(){
+                                        let id = $(this).parent().attr("id")
+                                         socket.emit('scoreUpdate',{'userId':id,'scoreUpdate':-1});
+                                        scored(id,-1);
+                              });
                     });
-                    $("li button#decrementScore").click(function(){
-                              scored($(this).parent().attr("id"),-1);
-                    });
-          });
+          }
 });
 
 
@@ -39,9 +45,8 @@ function init() {
     for (let x = 1; x <= nPlayers; x++) {
                   let p = new player(x);
                   playerList.push(p);
-                  let jqueryString = `<li id=${x} class="playersStyle"><b>${p.textString()}</b></li>`
-                  $("div#list > ul").append($(jqueryString));
-                  $('div#sel1').append(`<option>${x}</option>`);
+                  $("div#list > ul").append(`<li id=${x} class="playersStyle"><b>${p.textString()}</b></li>`);
+                  $('select#sel1').append(`<option>${x}</option>`);
     }
 }
 
@@ -73,28 +78,20 @@ class player {
 
 /*4. ------------------When a player gets scored / has scored----------*/
 function scored(playerId,pointsScored){
-          let idOfPlayer = playerId;
-          let points = pointsScored;
-          playerList[idOfPlayer - 1].updateScore(points);
-          let playerScore = playerList[idOfPlayer - 1].textString();
-          /* ------------------Socket Code - DO NOT ERASE-----------*/
-          socket.emit('scoreUpdate',{'userId':playerId,'scoreUpdate':points});
+          playerList[playerId - 1].updateScore(pointsScored);
           /* -----Update the player's score in html */
-          $(`li#${idOfPlayer} > b`).html(playerScore);
-
+          $(`li#${playerId} > b`).html(playerList[playerId - 1].textString());
           /* **********Animation ***************/
-          let animationClass = "";
-          if (points > 0){
-                    animate(idOfPlayer,"playerScoreAnimation");}
+          if (pointsScored > 0){
+                    animate(playerId,"playerScoreAnimation");}
           else{
-                    animate(idOfPlayer,"playerDeductScoreAnimation");}
+                    animate(playerId,"playerDeductScoreAnimation");}
 }
 
 
 /* 4.i --------------Animation for scored function --------------*/
 function animate(playerID,classAnimation){
           $("ul li.playersStyle").eq(playerID- 1).addClass(classAnimation);
-
           window.setTimeout(function(){
                     $("ul li.playersStyle").eq(playerID - 1).removeClass(classAnimation);
           },400);
@@ -102,8 +99,10 @@ function animate(playerID,classAnimation){
 
 
 /*5. ------------------When the user adds/subtracts score for a player --------*/
-scoreButton.addEventListener("click", function() {
+$('button#button-success').on("click", function() {
     let idOfPlayer = Number(selectHTML.value);
-    let points = Number(selectHTML.value);
+    let points = Number(document.querySelector('input#points').value);
+    /* --------Socket Code - DO NOT ERASE------*/
+    socket.emit('scoreUpdate',{'userId':idOfPlayer,'scoreUpdate':points});
     scored(idOfPlayer,points);
 });

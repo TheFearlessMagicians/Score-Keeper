@@ -92,25 +92,28 @@ let server = app.listen(serverPort, function() {
 });
 
 io.attach(server);
+let sockets = []
 io.on('connection', function(socket) {
-    socket.on('connect', function(data) {});
-    socket.on('scoreUpdate', function(data) {
-        let userId = Number(data.userId);
-        let scoreUpdate = Number(data.scoreUpdate);
-        console.log(currentGameID);
-        Player.update({
-            parentGameId: currentGameID,
-            idInGame: userId,
-
-        }, {
-            $inc: {
-                points: scoreUpdate,
-            },
-        },
-        function(error, updatedPlayer) {
-            if (error) {
-                console.log(error);
-            }
-        });
-    });
+          console.log('a client connected.')
+          sockets.push(socket);
+          console.log(`${sockets.length} players`)
+          socket.on('scoreUpdate', function(data) {
+                    socket.broadcast.emit('scoreUpdate',data)
+                    let userId = Number(data.userId);
+                    let scoreUpdate = Number(data.scoreUpdate);
+                    console.log(currentGameID);
+                    Player.update({
+                      parentGameId: currentGameID,
+                      idInGame: userId,
+                    }, {
+                      $inc: {
+                          points: scoreUpdate,
+                      },
+                    },
+                    function(error, updatedPlayer) {
+                      if (error) {
+                          console.log(error);
+                      }
+                    });
+          });
 });
