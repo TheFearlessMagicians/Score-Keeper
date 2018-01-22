@@ -12,7 +12,9 @@ let serverPort = 8000;
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', 'views');
 app.set('view engine', 'ejs');
-
+app.set('state','init'); //two states: init, and scoring. init is where you select how many players,
+//and scoring is when you are scoring the players.
+//Connecting to database
 //Connecting to database
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/ScoreKeeper", { useMongoClient: true });
@@ -47,15 +49,23 @@ app.use(methodOverride("_method"));
 
 //Routes
 app.get('/', function(req, res) {
+
+          if( app.get('state') == 'scoring')
+          {
+                    Game.findOne({}, {}, { sort: { 'created_at': -1 } }).populate("players").sort({'_id': -1}).exec(function(error, foundGame) {
+                              if (error) {
+                                        console.log(error);
+                              } else {
+                                        res.render('index', {gameState:'scoring',playersData: foundGame});
+                                        console.log(foundGame);
+                              }
+                    });
+          }else {                                                              //Where every player is a json object like: {id: (player Id), score: (player's score)}
+                    res.render('index',{gameState: 'init', playersData:[]});
+          }
     // -1 for oldest, 1 for the newest
-    Game.findOne({}, {}, { sort: { 'created_at': -1 } }).populate("players").exec(function(error, foundGame) {
-        if (error) {
-            console.log(error);
-        } else {
-            res.render('index', foundGame);
-            console.log(foundGame);
-        }
-    });
+
+
     // res.render('index', {});
 });
 
@@ -106,6 +116,13 @@ io.on('connection', function(socket) {
     console.log('a client connected.')
     sockets.push(socket);
     console.log(`${sockets.length} players`)
+
+
+    // Events:
+    socket.on('startScoring',function(data){
+                    app.set('state','scoring');
+          });
+
     socket.on('scoreUpdate', function(data) {
         socket.broadcast.emit('scoreUpdate', data)
         let userId = Number(data.userId);

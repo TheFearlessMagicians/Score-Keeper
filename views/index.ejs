@@ -57,7 +57,14 @@
 <!-- jquery post scripts: -->
 
 <script>
+var gameState = "<%= gameState %>";
+var playersData =<%- JSON.stringify(playersData) %>;
+console.log(`mode now is ${gameState}`);
+if (gameState == 'scoring'){
+
+}else{
 $('#game').css("display","none");
+}
 $("button#goBtn").on('click', function(event){
     // console.log('posted '+document.getElementById('numOfPlayers').value);
     $.post('/', {players:document.getElementById('numOfPlayers').value}, function(event){
