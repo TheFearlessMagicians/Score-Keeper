@@ -4,6 +4,8 @@ let playerList = [];
 let selectHTML = document.getElementById("sel1");
 let alert = document.getElementsByClassName("alert")[0];
 
+
+/*1. -----------------Player class useful to store player data locally (client side) -------------*/
 // player class is defined here because of JS hoisting. (classes can get reference error when they aren't defined yet but already
 //used. )
 class player {
@@ -27,7 +29,7 @@ class player {
     }
 }
 
-/* 1. ---------If game has started, then get data about that game from db(see app.js)-----*/
+/* 2. ---------If game has started, then get data about that game from db(see app.js)-----*/
 if (gameState== 'scoring'){
           console.log('going to scoring module');
           // this is already defined in index.ejs -> var playersData =<%- JSON.stringify(playersData) %>;
@@ -50,7 +52,7 @@ if (gameState== 'scoring'){
                     });
           });
 }else{
-          /* 1a. --------------Go Btn to start a game. ------------------*/
+          /* 2i. --------------Go Btn to start a game. ------------------*/
           document.getElementById('goBtn').addEventListener("click", function() {
                     playerList = []
                     if (Number(inputPlayers.value) <= 1) {
@@ -88,7 +90,7 @@ if (gameState== 'scoring'){
 
 }
 
-/* 2. ------------------Function for initialising a new game  (client side)-----------------*/
+/* 3. ------------------Function for initialising a new game  (client side)-----------------*/
 
 function init(nPlayers,jsonObject=null) {
           playerList = [];
@@ -100,7 +102,6 @@ function init(nPlayers,jsonObject=null) {
                           }
                 }
                 else{
-                          jsonny = jsonObject;
                           console.log(`json object: ${jsonObject}`);
                           jsonObject.players.forEach((pl)=>{
                                    // let p = new player(0,0,0);
@@ -120,10 +121,6 @@ function init(nPlayers,jsonObject=null) {
                 $('select#sel1').append(`<option>${p.id}</option>`);
                 });
 }
-
-
-
-/*3. -----------------Player class useful to store player data locally (client side) -------------*/
 
 
 
