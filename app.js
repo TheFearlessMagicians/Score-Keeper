@@ -47,7 +47,16 @@ app.use(methodOverride("_method"));
 
 //Routes
 app.get('/', function(req, res) {
-    res.render('index', {});
+    // -1 for oldest, 1 for the newest
+    Game.findOne({}, {}, { sort: { 'created_at': -1 } }).populate("players").exec(function(error, foundGame) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.render('index', foundGame);
+            console.log(foundGame);
+        }
+    });
+    // res.render('index', {});
 });
 
 app.post('/', function(req, res) {
@@ -94,26 +103,28 @@ let server = app.listen(serverPort, function() {
 io.attach(server);
 let sockets = []
 io.on('connection', function(socket) {
-          console.log('a client connected.')
-          sockets.push(socket);
-          console.log(`${sockets.length} players`)
-          socket.on('scoreUpdate', function(data) {
-                    socket.broadcast.emit('scoreUpdate',data)
-                    let userId = Number(data.userId);
-                    let scoreUpdate = Number(data.scoreUpdate);
-                    console.log(currentGameID);
-                    Player.update({
-                      parentGameId: currentGameID,
-                      idInGame: userId,
-                    }, {
-                      $inc: {
-                          points: scoreUpdate,
-                      },
-                    },
-                    function(error, updatedPlayer) {
-                      if (error) {
-                          console.log(error);
-                      }
-                    });
-          });
+    console.log('a client connected.')
+    sockets.push(socket);
+    console.log(`${sockets.length} players`)
+    socket.on('scoreUpdate', function(data) {
+        socket.broadcast.emit('scoreUpdate', data)
+        let userId = Number(data.userId);
+        let scoreUpdate = Number(data.scoreUpdate);
+        console.log(currentGameID);
+        Player.update({
+                parentGameId: currentGameID,
+                idInGame: userId,
+            }, {
+                $inc: {
+                    points: scoreUpdate,
+                },
+            },
+            function(error, updatedPlayer) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(updatedPlayer);
+                }
+            });
+    });
 });
