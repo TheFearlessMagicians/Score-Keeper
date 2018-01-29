@@ -3,7 +3,7 @@ let inputPlayers = document.getElementById("numOfPlayers");
 let playerList = [];
 let selectHTML = document.getElementById("sel1");
 let alert = document.getElementsByClassName("alert")[0];
-
+let maxScore = 0; // For progress bar visualisation.
 
 /*1. -----------------Player class useful to store player data locally (client side) -------------*/
 // player class is defined here because of JS hoisting. (classes can get reference error when they aren't defined yet but already
@@ -18,6 +18,10 @@ class player {
         this.score += points;
         this.turns++;
     }
+    //Wilson: added this for convenience.
+    getId(){
+              return this.id;
+   }
     score() {
         return this.score;
     }
@@ -93,6 +97,7 @@ if (gameState== 'scoring'){
 /* 3. ------------------Function for initialising a new game  (client side)-----------------*/
 
 function init(nPlayers,jsonObject=null) {
+          maxScore = 0;
           playerList = [];
                 if( jsonObject === null){
                           for (let x = 1; x <= nPlayers; x++) {
@@ -103,11 +108,9 @@ function init(nPlayers,jsonObject=null) {
                 }
                 else{
                           console.log(`json object: ${jsonObject}`);
-                          jsonObject.players.forEach((pl)=>{
-                                   // let p = new player(0,0,0);
+                          jsonObject.players.forEach(function(pl){
                                     let p = new player(Number(pl.idInGame),Number( pl.points), 0);
                                     console.log(`${pl.idInGame}, ${pl.points}`);
-                                    //let p = new player(12,300,0); // TODO why is this not a constructor????
                                     playerList.push(p);
                           });
                 }
@@ -115,26 +118,67 @@ function init(nPlayers,jsonObject=null) {
                           return Number(a.id) - Number(b.id);
                 });
 
-                playerList.forEach((p)=>{
+                playerList.forEach(function(p){
+                          // append li to ul.
+                         $("div#list > ul").append(`<li id=${p.id} class="playersStyle"><b>${p.textString()}</b></li>`);
+                          //Append progress bar right under it.
 
-                $("div#list > ul").append(`<li id=${p.id} class="playersStyle"><b>${p.textString()}</b></li>`);
-                $('select#sel1').append(`<option>${p.id}</option>`);
+                          $("div#list > ul").append(
+                                    `<div class="progress">
+                                        <div class="progress-bar bg-primary" id="playerBar_${p.id}" role="progressbar" style="width: 0%" aria-valuenow="100"
+                                        aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                     </div>`);
+                           if(maxScore < p.score){
+                                     maxScore = p.score;
+                           }
+                           if(jsonObject ===null)
+                                 maxScoreChanged(0);;
+                          // Put this player as an option to the selector.
+                          $('select#sel1').append(`<option>${p.id}</option>`);
                 });
+                //TODO put vvvv on a callback after initialiszing all the players.
+                maxScoreChanged(maxScore);
+
 }
 
 
+function maxScoreChanged(maxScore){
+          console.log(`score changed to ${maxScore}`);
+          if (maxScore == 0){
+                    playerList.forEach(function(player){
+                              $(`div#playerBar_${player.id}`).css("width",`0%`);
+                    });
+          }else{
+                    playerList.forEach(function(player){
+                              $(`div#playerBar_${player.id}`).css("width",`${100 * ( player.score/maxScore)}%`);
+                    });
+          }
 
+}
 
 /*4. ------------------When a player gets scored / has scored----------*/
 function scored(playerId,pointsScored){
           playerList[playerId - 1].updateScore(pointsScored);
+          //TODO: pgbar is only changing when Maxscore is changed.
+          $(`div#playerBar_${playerId}`).css("width",`${100 * ( playerList[playerId-1].score/maxScore)}%`);
           /* -----Update the player's score in html */
           $(`li#${playerId} > b`).html(playerList[playerId - 1].textString());
           /* **********Animation ***************/
+
           if (pointsScored > 0){
                     animate(playerId,"playerScoreAnimation");}
           else{
                     animate(playerId,"playerDeductScoreAnimation");}
+
+          let tempMax =0;
+          playerList.forEach(function(p){
+                    if (p.score > tempMax)
+                              tempMax = p.score;
+          });
+          maxScoreChanged(tempMax);
+
+
 }
 
 
