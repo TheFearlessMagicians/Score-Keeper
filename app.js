@@ -1,18 +1,19 @@
 //Entry Point for the web app
 let express = require("express");
-let io = require('socket.io')();
-let app = express();
-let bodyParser = require("body-parser");
-let mongoose = require("mongoose");
-let methodOverride = require("method-override");
-let path = require('path');
-let serverPort = 8000;
+    io = require('socket.io')();
+    app = express();
+    bodyParser = require("body-parser");
+    mongoose = require("mongoose");
+    methodOverride = require("method-override");
+    path = require('path');
+    serverPort = 8000;
+
 
 //Allowing JS and CSS to run somoothly and setting up a public directory for the css
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', 'views');
 app.set('view engine', 'ejs');
-app.set('state','init'); //two states: init, and scoring. init is where you select how many players,
+app.set('state', 'init'); //two states: init, and scoring. init is where you select how many players,
 //and scoring is when you are scoring the players.
 //Connecting to database
 //Connecting to database
@@ -48,21 +49,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 //Routes
+app.get('/load', function (req,res){
+    res.render("load");
+});
+
 app.get('/', function(req, res) {
 
-          if( app.get('state') == 'scoring')
-          {
-                    Game.findOne({}, {}, { sort: { 'created_at': -1 } }).populate("players").sort({'_id': -1}).exec(function(error, foundGame) {
-                              if (error) {
-                                        console.log(error);
-                              } else {
-                                        res.render('index', {gameState:'scoring',playersData: foundGame});
-                                        console.log(foundGame);
-                              }
-                    });
-          }else {                                                              //Where every player is a json object like: {id: (player Id), score: (player's score)}
-                    res.render('index',{gameState: 'init', playersData:[]});
-          }
+    if (app.get('state') == 'scoring') {
+        Game.findOne({}, {}, { sort: { 'created_at': -1 } }).populate("players").sort({ '_id': -1 }).exec(function(error, foundGame) {
+            if (error) {
+                console.log(error);
+            } else {
+                res.render('index', { gameState: 'scoring', playersData: foundGame });
+                console.log(foundGame);
+            }
+        });
+    } else { //Where every player is a json object like: {id: (player Id), score: (player's score)}
+        res.render('index', { gameState: 'init', playersData: [] });
+    }
     // -1 for oldest, 1 for the newest
 
 
@@ -119,9 +123,9 @@ io.on('connection', function(socket) {
 
 
     // Events:
-    socket.on('startScoring',function(data){
-                    app.set('state','scoring');
-          });
+    socket.on('startScoring', function(data) {
+        app.set('state', 'scoring');
+    });
 
     socket.on('scoreUpdate', function(data) {
         socket.broadcast.emit('scoreUpdate', data)
