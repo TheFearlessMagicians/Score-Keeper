@@ -174,15 +174,6 @@ animation: your-animation-name2 0.4s ease 0s 1 alternate !important;
     }
 }
 
-#footerWrap {
-    min-height: 100%;
-}
-
-#footerDiv {
-    overflow:auto;
-    padding-bottom:180px;
-    /* this needs to be bigger than footer height*/
-}
 
 .footer {
     position: absolute;
