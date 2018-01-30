@@ -1,12 +1,12 @@
 //Entry Point for the web app
 let express = require("express");
-    io = require('socket.io')();
-    app = express();
-    bodyParser = require("body-parser");
-    mongoose = require("mongoose");
-    methodOverride = require("method-override");
-    path = require('path');
-    serverPort = 8000;
+io = require('socket.io')();
+app = express();
+bodyParser = require("body-parser");
+mongoose = require("mongoose");
+methodOverride = require("method-override");
+path = require('path');
+serverPort = 8000;
 
 
 //Allowing JS and CSS to run somoothly and setting up a public directory for the css
@@ -36,7 +36,8 @@ let GameSchema = new mongoose.Schema({
     created: {
         type: Date,
         default: Date.now,
-    }
+    },
+    gameNumber: Number
 }, { usePushEach: true });
 
 let Game = mongoose.model('Game', GameSchema);
@@ -49,8 +50,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 //Routes
-app.get('/load', function (req,res){
-    res.render("load");
+app.get('/load', function(req, res) {
+    Game.find({}).limit(9).populate({
+        path: 'players',
+        options: {
+            sort: {
+                'points': -1,
+            }
+        }
+    }).exec(function(error, games) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.render("load", { games: games });
+        }
+    });
 });
 
 app.get('/', function(req, res) {
@@ -73,15 +87,27 @@ app.get('/', function(req, res) {
     // res.render('index', {});
 });
 
+function gameCount() {
+    Game.count({}, function(err, count) {
+        if (typeof count == "number") {
+            if (count !== undefined)
+                return count + 1;
+            return 1;
+        }
+    });
+}
+
 app.post('/', function(req, res) {
     //populate the DB
     let players = Number(req.body.players);
     Game.create({
         players: [],
+        gameNumber: gameCount(), //TODO why is this undefined
     }, function(error, newGame) {
         if (error) {
             console.log(error);
         } else {
+            console.log("GAME NUMBER: ", newGame.gameNumber)
             currentGameID = newGame._id;
             for (let i = 1; i <= players; i++) {
                 Player.create({

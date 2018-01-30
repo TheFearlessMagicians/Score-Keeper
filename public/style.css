@@ -1,3 +1,7 @@
+.no-bullets {
+    list-style-type: none;
+}
+
 .alert {
     visibility: hidden;
     text-align: center;
