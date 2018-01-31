@@ -106,7 +106,6 @@ app.post('/', function(req, res) {
         if (error) {
             console.log(error);
         } else {
-            console.log("GAME NUMBER: ", newGame.gameNumber)
             currentGameID = newGame._id;
             for (let i = 1; i <= players; i++) {
                 Player.create({
