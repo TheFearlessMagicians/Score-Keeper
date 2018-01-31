@@ -87,6 +87,7 @@ if (gameState == 'scoring') {
     alert.style.display = "none";
     document.getElementsByClassName("playersPlaying").innerHTML = "Players playing: " + playersData.length;
     $("form#initialForm").slideUp(40, () => {
+              console.log('appending buttons.')
         $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>")
             .prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
         $("li button#incrementScore").click(function() {
@@ -120,6 +121,7 @@ if (gameState == 'scoring') {
 
             /*--------Animation for the login thing to slide up, and functions for  scoring -----*/
             $("form#initialForm").slideUp(400, () => {
+                    console.log('appending buttons.')
                 $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>")
                     .prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
                 $("li button#incrementScore").click(function() {
@@ -157,6 +159,7 @@ socket.on('connect', function(){
     });
 
 });
+
 
 </script>
 

@@ -151,6 +151,7 @@ function initScore(){
           for(let x = 0; x < 5; x++){
                     $("tbody").append(`<tr id=rank_${x} ></tr>`);
           }
+            updateRank();
 }
 var sort_by = function(field, reverse, primer){
 
@@ -166,7 +167,8 @@ var sort_by = function(field, reverse, primer){
 }
 
 function sortScore(){
-  let nPlayers = Number(inputPlayers.value);
+          //console.log('sort score called.')
+  let nPlayers = playerList.length;//Number(inputPlayers.value);//NOTE TO HANIF: This shouldn't be inputPlayers.value. cos other browsers wont have that value.
   for(let x = 1; x <= nPlayers; x++){
     ranking[x-1] = {"id": x, "score": playerList[x-1].score};
   }
@@ -174,7 +176,7 @@ function sortScore(){
 }
 
 function updateRank(){
-          console.log('updateRank called');
+          //console.log('updateRank called');
     sortScore();
     for(let x = 0; x < 5; x++){
               //console.log(x);
