@@ -40,16 +40,21 @@
         </div>
     </div>
 </div>
-    <!--</div>-->
-    <!--
-    TODO : Progress bar
-       <div class="progress">
-         <div class="progress-bar bg-primary" id="playerBar_1" role="progressbar" style="width: 90%" aria-valuenow="100"
-           aria-valuemin="0" aria-valuemax="100"></div>
-       </div>
-          -->
+<div class="container" id="ranking">
+          <h4>Ranking Table</h4>
+          <table class = "table table-stripped" id = "ranking">
+             <thead>
+                       <th scope = "col">Rank</th>
+                 <th scope = "col">Player</th>
+                 <th scope = "col">Score</th>
+             </thead>
+             <tbody>
 
-<!-- jquery post scripts: -->
+             </tbody>
+          </table>
+
+
+</div>
 
 <script>
 var gameState = "<%= gameState %>";
@@ -70,6 +75,66 @@ $("button#goBtn").on('click', function(event){
     $("#game").css("display","block");
 });
 
+
+if (gameState == 'scoring') {
+    console.log('going to scoring module');
+    // this is already defined in index.ejs -> var playersData =<%- JSON.stringify(playersData) %>;
+    init(playersData.length, playersData);
+    alert.style.visibility = "hidden";
+    alert.style.display = "none";
+    document.getElementsByClassName("playersPlaying").innerHTML = "Players playing: " + playersData.length;
+    $("form#initialForm").slideUp(40, () => {
+        $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>")
+            .prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
+        $("li button#incrementScore").click(function() {
+            let id = $(this).parent().attr("id")
+            socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': 1 });
+            scored(id, 1);
+        });
+        $("li button#decrementScore").click(function() {
+            let id = $(this).parent().attr("id")
+            socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': -1 });
+            scored(id, -1);
+        });
+    });
+} else {
+    /* 2i. --------------Go Btn to start a game. ------------------*/
+    document.getElementById('goBtn').addEventListener("click", function() {
+        playerList = []
+        if (Number(inputPlayers.value) <= 1) {
+            // Alert the user that he/she has entered invalid value..
+            alert.style.visibility = "visible";
+            alert.style.display = "block";
+        } else if (Number(inputPlayers.value) >= 2 /*&& alert.style.visibility == "visible"*/ ) {
+            //NOTE: @ VARUN why must there be a && alert.style.visibility up here ^^ ???
+            //What's the purpose? I commented it out cos i thought it was unnecessary.??
+            alert.style.visibility = "hidden";
+            alert.style.display = "none";
+            document.getElementsByClassName("playersPlaying").innerHTML = "Players playing: " + inputPlayers.value;
+            init(Number(inputPlayers.value));
+            /*-------- Tell server that game has started */
+            socket.emit('startScoring', {});
+
+            /*--------Animation for the login thing to slide up, and functions for  scoring -----*/
+            $("form#initialForm").slideUp(400, () => {
+                $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>")
+                    .prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
+                $("li button#incrementScore").click(function() {
+                    let id = $(this).parent().attr("id")
+                    socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': 1 });
+                    scored(id, 1);
+                });
+                $("li button#decrementScore").click(function() {
+                    let id = $(this).parent().attr("id")
+                    socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': -1 });
+                    scored(id, -1);
+                });
+            });
+        }
+    });
+
+
+}
 
 
 

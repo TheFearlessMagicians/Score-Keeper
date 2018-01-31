@@ -4,7 +4,7 @@ let playerList = [];
 let selectHTML = document.getElementById("sel1");
 let alert = document.getElementsByClassName("alert")[0];
 let maxScore = 0; // For progress bar visualisation.
-
+let ranking = [];
 /*1. -----------------Player class useful to store player data locally (client side) -------------*/
 // player class is defined here because of JS hoisting. (classes can get reference error when they aren't defined yet but already
 //used. )
@@ -34,66 +34,7 @@ class player {
 }
 
 /* 2. ---------If game has started, then get data about that game from db(see app.js)-----*/
-if (gameState == 'scoring') {
-    console.log('going to scoring module');
-    // this is already defined in index.ejs -> var playersData =<%- JSON.stringify(playersData) %>;
-    init(playersData.length, playersData);
-    alert.style.visibility = "hidden";
-    alert.style.display = "none";
-    document.getElementsByClassName("playersPlaying").innerHTML = "Players playing: " + playersData.length;
-    $("form#initialForm").slideUp(40, () => {
-        $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>")
-            .prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
-        $("li button#incrementScore").click(function() {
-            let id = $(this).parent().attr("id")
-            socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': 1 });
-            scored(id, 1);
-        });
-        $("li button#decrementScore").click(function() {
-            let id = $(this).parent().attr("id")
-            socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': -1 });
-            scored(id, -1);
-        });
-    });
-} else {
-    /* 2i. --------------Go Btn to start a game. ------------------*/
-    document.getElementById('goBtn').addEventListener("click", function() {
-        playerList = []
-        if (Number(inputPlayers.value) <= 1) {
-            // Alert the user that he/she has entered invalid value..
-            alert.style.visibility = "visible";
-            alert.style.display = "block";
-        } else if (Number(inputPlayers.value) >= 2 /*&& alert.style.visibility == "visible"*/ ) {
-            //NOTE: @ VARUN why must there be a && alert.style.visibility up here ^^ ???
-            //What's the purpose? I commented it out cos i thought it was unnecessary.??
-            alert.style.visibility = "hidden";
-            alert.style.display = "none";
-            document.getElementsByClassName("playersPlaying").innerHTML = "Players playing: " + inputPlayers.value;
-            init(Number(inputPlayers.value));
-            /*-------- Tell server that game has started */
-            socket.emit('startScoring', {});
-
-            /*--------Animation for the login thing to slide up, and functions for  scoring -----*/
-            $("form#initialForm").slideUp(400, () => {
-                $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>")
-                    .prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
-                $("li button#incrementScore").click(function() {
-                    let id = $(this).parent().attr("id")
-                    socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': 1 });
-                    scored(id, 1);
-                });
-                $("li button#decrementScore").click(function() {
-                    let id = $(this).parent().attr("id")
-                    socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': -1 });
-                    scored(id, -1);
-                });
-            });
-        }
-    });
-
-
-}
-
+/* SEE index.ejs"
 /* 3. ------------------Function for initialising a new game  (client side)-----------------*/
 
 function init(nPlayers, jsonObject = null) {
@@ -106,13 +47,16 @@ function init(nPlayers, jsonObject = null) {
             playerList.push(p);
         }
     } else {
+
         console.log(`json object: ${jsonObject}`);
         jsonObject.players.forEach(function(pl) {
             let p = new player(Number(pl.idInGame), Number(pl.points), 0);
             console.log(`${pl.idInGame}, ${pl.points}`);
             playerList.push(p);
         });
+
     }
+
     playerList.sort(function(a, b) {
         return Number(a.id) - Number(b.id);
     });
@@ -138,7 +82,7 @@ function init(nPlayers, jsonObject = null) {
     });
     //TODO put vvvv on a callback after initialiszing all the players.
     maxScoreChanged(maxScore);
-
+    initScore();
 }
 
 
@@ -177,6 +121,7 @@ function scored(playerId, pointsScored) {
             tempMax = p.score;
     });
     maxScoreChanged(tempMax);
+    updateRank();
 
 
 }
@@ -199,3 +144,42 @@ $('button#button-success').on("click", function() {
     socket.emit('scoreUpdate', { 'userId': idOfPlayer, 'scoreUpdate': points });
     scored(idOfPlayer, points);
 });
+
+
+
+function initScore(){
+          for(let x = 0; x < 5; x++){
+                    $("tbody").append(`<tr id=rank_${x} ></tr>`);
+          }
+}
+var sort_by = function(field, reverse, primer){
+
+   var key = primer ?
+       function(x) {return primer(x[field])} :
+       function(x) {return x[field]};
+
+   reverse = !reverse ? 1 : -1;
+
+   return function (a, b) {
+       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+     }
+}
+
+function sortScore(){
+  let nPlayers = Number(inputPlayers.value);
+  for(let x = 1; x <= nPlayers; x++){
+    ranking[x-1] = {"id": x, "score": playerList[x-1].score};
+  }
+  ranking.sort(sort_by('score', true, parseInt));
+}
+
+function updateRank(){
+          console.log('updateRank called');
+    sortScore();
+    for(let x = 0; x < 5; x++){
+              //console.log(x);
+            //  console.log(`<td>${ranking[x].id}</td><td>${ranking[x].score}</td>`);
+              $(`tbody tr#rank_${x}`).html(`<td>${x+1}</td><td>${ranking[x].id}</td><td>${ranking[x].score}</td>`);
+       //$("tbody").append(`<tr id=${x} ><td>${ranking[x].id}</td><td>${ranking[x].score}</td></tr>`);
+    }
+}
