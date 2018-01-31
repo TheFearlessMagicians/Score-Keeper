@@ -41,8 +41,9 @@
     </div>
 </div>
 <div class="container" id="ranking">
-          <h4>Ranking Table</h4>
+<h4>Ranking Table</h4>
           <table class = "table table-stripped" id = "ranking">
+
              <thead>
                        <th scope = "col">Rank</th>
                  <th scope = "col">Player</th>
@@ -64,6 +65,7 @@ if (gameState == 'scoring'){
 
 }else{
 $('#game').css("display","none");
+$("div#ranking").css("display","none");
 }
 $("button#goBtn").on('click', function(event){
     // console.log('posted '+document.getElementById('numOfPlayers').value);
@@ -73,6 +75,7 @@ $("button#goBtn").on('click', function(event){
 
     });
     $("#game").css("display","block");
+    $("div#ranking").css("display","block");
 });
 
 
