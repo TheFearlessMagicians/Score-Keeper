@@ -1,6 +1,6 @@
 //Entry Point for the web app
 let express = require("express");
-let executeCommand=  require('child_process').exec;
+//let executeCommand=  require('child_process').exec;
 io = require('socket.io')();
 app = express();
 bodyParser = require("body-parser");
@@ -8,7 +8,7 @@ mongoose = require("mongoose");
 methodOverride = require("method-override");
 path = require('path');
 serverPort = 8000;
-executeCommand("sh scripts/whichNodeAndUser.sh");
+//executeCommand("sh scripts/whichNodeAndUser.sh");
 
 //Allowing JS and CSS to run somoothly and setting up a public directory for the css
 app.use(express.static(path.join(__dirname, 'public')));
