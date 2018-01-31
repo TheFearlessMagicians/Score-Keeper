@@ -59,23 +59,25 @@
 
 <script>
 var gameState = "<%= gameState %>";
-var playersData =<%- JSON.stringify(playersData) %>;
+var playersData = <%- JSON.stringify(playersData) %>;
 console.log(`mode now is ${gameState}`);
-if (gameState == 'scoring'){
+if (gameState == 'scoring') {
 
-}else{
-$('#game').css("display","none");
-$("div#ranking").css("display","none");
+} else {
+    $('#game').css("display", "none");
+    $("div#ranking").css("display", "none");
 }
-$("button#goBtn").on('click', function(event){
+$("button#goBtn").on('click', function(event) {
     // console.log('posted '+document.getElementById('numOfPlayers').value);
-    $.post('/', {players:document.getElementById('numOfPlayers').value}, function(event){
-              //Post is broken here?
+    $.post('/', {
+        players: document.getElementById('numOfPlayers').value
+    }, function(event) {
+        //Post is broken here?
 
 
     });
-    $("#game").css("display","block");
-    $("div#ranking").css("display","block");
+    $("#game").css("display", "block");
+    $("div#ranking").css("display", "block");
 });
 
 
@@ -87,17 +89,23 @@ if (gameState == 'scoring') {
     alert.style.display = "none";
     document.getElementsByClassName("playersPlaying").innerHTML = "Players playing: " + playersData.length;
     $("form#initialForm").slideUp(40, () => {
-              console.log('appending buttons.')
+        console.log('appending buttons.')
         $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>")
             .prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
         $("li button#incrementScore").click(function() {
             let id = $(this).parent().attr("id")
-            socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': 1 });
+            socket.emit('scoreUpdate', {
+                'userId': id,
+                'scoreUpdate': 1
+            });
             scored(id, 1);
         });
         $("li button#decrementScore").click(function() {
             let id = $(this).parent().attr("id")
-            socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': -1 });
+            socket.emit('scoreUpdate', {
+                'userId': id,
+                'scoreUpdate': -1
+            });
             scored(id, -1);
         });
     });
@@ -121,17 +129,23 @@ if (gameState == 'scoring') {
 
             /*--------Animation for the login thing to slide up, and functions for  scoring -----*/
             $("form#initialForm").slideUp(400, () => {
-                    console.log('appending buttons.')
+                console.log('appending buttons.')
                 $("ul li").append("<button  id=\"incrementScore\" class=\"incrementButtons\">+1</button>")
                     .prepend("<button id=\"decrementScore\" class=\"incrementButtons\">-1</button>");
                 $("li button#incrementScore").click(function() {
                     let id = $(this).parent().attr("id")
-                    socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': 1 });
+                    socket.emit('scoreUpdate', {
+                        'userId': id,
+                        'scoreUpdate': 1
+                    });
                     scored(id, 1);
                 });
                 $("li button#decrementScore").click(function() {
                     let id = $(this).parent().attr("id")
-                    socket.emit('scoreUpdate', { 'userId': id, 'scoreUpdate': -1 });
+                    socket.emit('scoreUpdate', {
+                        'userId': id,
+                        'scoreUpdate': -1
+                    });
                     scored(id, -1);
                 });
             });
@@ -145,21 +159,21 @@ if (gameState == 'scoring') {
 
 </script>
 <!-- socket-io scripts: -->
-<script src="/socket.io/socket.io.js"></script>
-<script>
-var socket = io.connect("localhost:8000");
-socket.on('connect', function(){
-          console.log('connected to socket.')
-    socket.on('scoreUpdate',function(data){
-              console.log('received score update from server.')
+
+<script src = "/socket.io/socket.io.js" > </script>
+ <script >
+    var socket = io.connect("localhost:8000");
+socket.on('connect', function() {
+    console.log('connected to socket.')
+    socket.on('scoreUpdate', function(data) {
+        console.log('received score update from server.')
         let userId = data.userId;
         let scoreUpdate = data.scoreUpdate;
-        scored(userId,scoreUpdate);
+        scored(userId, scoreUpdate);
 
     });
 
 });
-
 
 </script>
 
