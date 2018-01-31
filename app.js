@@ -37,7 +37,6 @@ let GameSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    gameNumber: Number
 }, { usePushEach: true });
 
 let Game = mongoose.model('Game', GameSchema);
@@ -87,22 +86,22 @@ app.get('/', function(req, res) {
     // res.render('index', {});
 });
 
-function gameCount() {
-    Game.count({}, function(err, count) {
-        if (typeof count == "number") {
-            if (count !== undefined)
-                return count + 1;
-            return 1;
+app.delete("/", function (req,res){
+    Game.remove({_id: req.body.id}, function (error, deletedGame){
+        if (error){
+            console.log(error);
+        } else {
+            console.log(deletedGame);
         }
     });
-}
+    res.redirect("/load");
+});
 
 app.post('/', function(req, res) {
     //populate the DB
     let players = Number(req.body.players);
     Game.create({
         players: [],
-        gameNumber: gameCount(), //TODO why is this undefined
     }, function(error, newGame) {
         if (error) {
             console.log(error);

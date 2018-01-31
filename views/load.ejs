@@ -21,7 +21,10 @@
 	        		<p>
 	        			<a href="#" class="btn btn-primary" role="button">Load</a> 
 	   					<%//Make this a DELETE ROUTE%>
-	        			<a href="#" class="btn btn-danger" role="button">Delete</a>
+	   					<form action="/?_method=DELETE" method="POST" accept-charset="utf-8">
+	   						<input style ="display: none;" value="<%=game._id%>" type="text" name="id">
+	        				<button class="btn btn-danger">Delete</button>
+	   					</form>
 	        		</p>
 	      		</div>
 	    	</div>
