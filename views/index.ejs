@@ -7,6 +7,9 @@
         <h1> Score Keeper </h1>
         <form id="initialForm" method="GET" action="/new">
             <div class="form-group">
+                <label for="gameName" id="labelPlayer">Game: &nbsp; </label>
+                <input type="text" name="gameName"> 
+                <span>  &nbsp;  &nbsp;  &nbsp;  &nbsp; </span>
                 <label for="numOfPlayers" id="labelPlayer">Players: &nbsp; </label>
                 <input id="numOfPlayers" type="number" name="players">
                 <button type="button" class="btn btn-default btn-lg" id="goBtn">Go!</button>
@@ -41,20 +44,16 @@
     </div>
 </div>
 <div class="container" id="ranking">
-<h4>Ranking Table</h4>
-          <table class = "table table-stripped" id = "ranking">
-
-             <thead>
-                       <th scope = "col">Rank</th>
-                 <th scope = "col">Player</th>
-                 <th scope = "col">Score</th>
-             </thead>
-             <tbody>
-
-             </tbody>
-          </table>
-
-
+    <h4>Ranking Table</h4>
+        <table class = "table table-stripped" id = "ranking">
+           <thead>
+               <th scope = "col">Rank</th>
+               <th scope = "col">Player</th>
+               <th scope = "col">Score</th>
+           </thead>
+           <tbody>
+           </tbody>
+        </table>
 </div>
 
 <script>

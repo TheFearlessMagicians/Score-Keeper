@@ -30,6 +30,7 @@ let PlayerSchema = new mongoose.Schema({
 let Player = mongoose.model('Player', PlayerSchema);
 
 let GameSchema = new mongoose.Schema({
+    name: String,
     players: [{
         ref: "Player",
         type: mongoose.Schema.Types.ObjectId,
@@ -68,14 +69,12 @@ app.get('/load', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-
     if (app.get('state') == 'scoring') {
         Game.findOne({}, {}, { sort: { 'created_at': -1 } }).populate("players").sort({ '_id': -1 }).exec(function(error, foundGame) {
             if (error) {
                 console.log(error);
             } else {
                 res.render('index', { gameState: 'scoring', playersData: foundGame });
-                console.log(foundGame);
             }
         });
     } else { //Where every player is a json object like: {id: (player Id), score: (player's score)}
@@ -87,12 +86,10 @@ app.get('/', function(req, res) {
     // res.render('index', {});
 });
 
-app.delete("/", function (req,res){
-    Game.remove({_id: req.body.id}, function (error, deletedGame){
-        if (error){
+app.delete("/", function(req, res) {
+    Game.remove({ _id: req.body.id }, function(error, deletedGame) {
+        if (error) {
             console.log(error);
-        } else {
-            console.log(deletedGame);
         }
     });
     res.redirect("/load");
@@ -101,8 +98,11 @@ app.delete("/", function (req,res){
 app.post('/', function(req, res) {
     //populate the DB
     let players = Number(req.body.players);
+    let gameName = req.body.gameName;
+    console.log(gameName);
     Game.create({
         players: [],
+        name: gameName,
     }, function(error, newGame) {
         if (error) {
             console.log(error);
@@ -142,13 +142,13 @@ let server = app.listen(serverPort, function() {
 io.attach(server);
 let sockets = []
 io.on('connection', function(socket) {
-    console.log('a client connected.')
+    // console.log('a client connected.')
     sockets.push(socket);
-    console.log(`${sockets.length} players`)
+    // console.log(`${sockets.length} players`)
 
 
     // Events:
-    socket.on('startScoring', function(data) {
+
         app.set('state', 'scoring');
     });
 
@@ -156,7 +156,6 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('scoreUpdate', data)
         let userId = Number(data.userId);
         let scoreUpdate = Number(data.scoreUpdate);
-        console.log(currentGameID);
         Player.update({
                 parentGameId: currentGameID,
                 idInGame: userId,
@@ -168,8 +167,6 @@ io.on('connection', function(socket) {
             function(error, updatedPlayer) {
                 if (error) {
                     console.log(error);
-                } else {
-                    console.log(updatedPlayer);
                 }
             });
     });
